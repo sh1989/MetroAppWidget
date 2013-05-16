@@ -4,8 +4,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="@dimen/widget_margin">
-    
-    <EditText
+
+    <Spinner
         android:id="@+id/configure_station"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

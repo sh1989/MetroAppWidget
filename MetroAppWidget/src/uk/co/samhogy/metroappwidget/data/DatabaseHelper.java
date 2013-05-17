@@ -2,9 +2,9 @@
 package uk.co.samhogy.metroappwidget.data;
 
 import android.content.Context;
-import android.database.DatabaseUtils.InsertHelper;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
 
 import uk.co.samhogy.metroappwidget.R;
 
@@ -38,44 +38,35 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase database) {
-        try {
-            database.setLockingEnabled(false);
-            createDatabase(database);
-
-        } finally {
-            database.setLockingEnabled(true);
-        }
-    }
-
-    private void createDatabase(SQLiteDatabase database) {
         database.execSQL(STATIONS_CREATE);
 
-        InsertHelper ih = new InsertHelper(database, TABLE_STATIONS);
-        final int stationName = ih.getColumnIndex(COLUMN_STATIONNAME);
-        final int lines = ih.getColumnIndex(COLUMN_LINES);
+        String sql = "INSERT INTO " + TABLE_STATIONS + " ( " + COLUMN_STATIONNAME + ", "
+                + COLUMN_LINES + " ) VALUES (?, ?)";
 
+        database.beginTransaction();
+        SQLiteStatement s = database.compileStatement(sql);
         InputStream is = ctx.getResources().openRawResource(R.raw.stations);
         try {
             BufferedReader rdr = new BufferedReader(new InputStreamReader(is));
             String line;
             while ((line = rdr.readLine()) != null)
             {
-                ih.prepareForInsert();
-
+                s.clearBindings();
                 String[] rowData = line.split(",");
+                s.bindString(0, rowData[0]);
+                s.bindLong(1, Integer.parseInt(rowData[1]));
 
-                ih.bind(stationName, rowData[0]);
-                ih.bind(lines, rowData[1]);
-
-                ih.execute();
+                s.execute();
             }
+
+            database.setTransactionSuccessful();
         } catch (IOException ex) {
         } finally {
             try {
                 is.close();
             } catch (IOException ex) {
             } finally {
-                ih.close();
+                database.endTransaction();
             }
         }
 

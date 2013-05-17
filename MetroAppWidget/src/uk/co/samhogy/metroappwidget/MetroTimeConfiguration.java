@@ -63,7 +63,7 @@ public class MetroTimeConfiguration extends Activity {
                 AppWidgetManager manager = AppWidgetManager
                         .getInstance(context);
                 MetroTimeProvider.updateAppWidget(context, manager,
-                        appWidgetId, station.getName());
+                        appWidgetId, station);
 
                 Intent result = new Intent();
                 result.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,

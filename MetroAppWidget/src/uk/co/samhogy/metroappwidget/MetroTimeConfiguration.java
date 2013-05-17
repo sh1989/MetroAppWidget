@@ -56,14 +56,14 @@ public class MetroTimeConfiguration extends Activity {
             @Override
             public void onClick(View v) {
                 final Context context = MetroTimeConfiguration.this;
+                final Station station = (Station) stationText.getSelectedItem();
 
-                String stationName = stationText.getSelectedItem().toString();
-                saveStationName(context, stationName, appWidgetId);
+                saveStationId(context, station.getId(), appWidgetId);
 
                 AppWidgetManager manager = AppWidgetManager
                         .getInstance(context);
                 MetroTimeProvider.updateAppWidget(context, manager,
-                        appWidgetId, stationName);
+                        appWidgetId, station.getName());
 
                 Intent result = new Intent();
                 result.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
@@ -94,24 +94,24 @@ public class MetroTimeConfiguration extends Activity {
         }
     }
 
-    static void saveStationName(Context context, String text, int appWidgetId) {
+    static void saveStationId(Context context, int stationId, int appWidgetId) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(
                 PREFS_NAME, 0).edit();
-        prefs.putString(PREF_PREFIX_KEY + appWidgetId, text);
+        prefs.putInt(PREF_PREFIX_KEY + appWidgetId, stationId);
         prefs.commit();
     }
 
-    static String loadStationName(Context context, int appWidgetId) {
+    static int loadStationId(Context context, int appWidgetId) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
-        String prefix = prefs.getString(PREF_PREFIX_KEY + appWidgetId, null);
-        if (prefix != null) {
+        int prefix = prefs.getInt(PREF_PREFIX_KEY + appWidgetId, -1);
+        if (prefix != -1) {
             return prefix;
         } else {
-            return context.getString(R.string.widget_prefix_default);
+            return 0;
         }
     }
 
-    static void deleteStationName(Context context, int appWidgetId) {
+    static void deleteStationId(Context context, int appWidgetId) {
         SharedPreferences.Editor prefs = context.getSharedPreferences(
                 PREFS_NAME, 0).edit();
         prefs.remove(PREF_PREFIX_KEY + appWidgetId);

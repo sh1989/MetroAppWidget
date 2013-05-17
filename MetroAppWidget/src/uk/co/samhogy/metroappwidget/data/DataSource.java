@@ -36,23 +36,36 @@ public class DataSource {
                 null, null, null);
         c.moveToFirst();
         while (!c.isAfterLast()) {
-            RailwayLines lines = RailwayLines.ALL;
-            switch (c.getInt(2))
-            {
-                case 1:
-                    lines = RailwayLines.GREEN;
-                    break;
-                case 2:
-                    lines = RailwayLines.YELLOW;
-                    break;
-                case 3:
-                default:
-                    lines = RailwayLines.ALL;
-            }
-
-            stations.add(new Station(c.getString(1), lines));
+            stations.add(parse(c));
             c.moveToNext();
         }
         return stations;
+    }
+
+    public Station getStation(int stationId) {
+        Cursor c = database.query(DatabaseHelper.TABLE_STATIONS, allStationColumns,
+                DatabaseHelper.COLUMN_UID + " = ?", new String[] {
+                    Integer.toString(stationId)
+                },
+                null, null, null);
+        c.moveToFirst();
+        return parse(c);
+    }
+
+    private Station parse(Cursor c) {
+        RailwayLines lines = RailwayLines.ALL;
+        switch (c.getInt(2))
+        {
+            case 1:
+                lines = RailwayLines.GREEN;
+                break;
+            case 2:
+                lines = RailwayLines.YELLOW;
+                break;
+            case 3:
+            default:
+                lines = RailwayLines.ALL;
+        }
+        return new Station(c.getInt(0), c.getString(1), lines);
     }
 }

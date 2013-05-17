@@ -6,7 +6,28 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.widget.RemoteViews;
 
+import uk.co.samhogy.metroappwidget.data.DataSource;
+import uk.co.samhogy.metroappwidget.data.Station;
+
 public class MetroTimeProvider extends AppWidgetProvider {
+
+    private DataSource source;
+
+    @Override
+    public void onEnabled(Context context) {
+        super.onEnabled(context);
+        source = new DataSource(context);
+        source.open();
+    }
+
+    @Override
+    public void onDisabled(Context context) {
+        super.onDisabled(context);
+        if (source != null) {
+            source.close();
+        }
+
+    }
 
     // Called every updatePeriodMillis
     @Override
@@ -16,8 +37,9 @@ public class MetroTimeProvider extends AppWidgetProvider {
 
         for (int i = 0; i < N; i++) {
             int appWidgetId = appWidgetIds[i];
-            String stationName = MetroTimeConfiguration.loadStationName(context, appWidgetId);
-            updateAppWidget(context, appWidgetManager, appWidgetId, stationName);
+            int stationId = MetroTimeConfiguration.loadStationId(context, appWidgetId);
+            Station station = source.getStation(stationId);
+            updateAppWidget(context, appWidgetManager, appWidgetId, station.getName());
         }
     }
 
@@ -25,6 +47,7 @@ public class MetroTimeProvider extends AppWidgetProvider {
             AppWidgetManager manager, int appWidgetId, String stationName) {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
         views.setTextViewText(R.id.widget_title, stationName);
+
         manager.updateAppWidget(appWidgetId, views);
     }
 
@@ -33,7 +56,7 @@ public class MetroTimeProvider extends AppWidgetProvider {
         final int N = appWidgetIds.length;
 
         for (int i = 0; i < N; i++) {
-            MetroTimeConfiguration.deleteStationName(context, appWidgetIds[i]);
+            MetroTimeConfiguration.deleteStationId(context, appWidgetIds[i]);
         }
     }
 

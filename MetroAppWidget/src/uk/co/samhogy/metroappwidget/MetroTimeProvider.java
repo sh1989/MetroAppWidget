@@ -4,6 +4,9 @@ package uk.co.samhogy.metroappwidget;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -14,17 +17,25 @@ import uk.co.samhogy.metroappwidget.data.Station;
 public class MetroTimeProvider extends AppWidgetProvider {
 
     private DataSource source;
+    private static int intent_counter = 0;
+    private static final String TAG = "uk.co.samhogy.metroappwidget";
 
     @Override
     public void onEnabled(Context context) {
+        Log.d(TAG, "onEnabled");
         super.onEnabled(context);
-        source = new DataSource(context);
-        source.open();
+        if (source == null) {
+            Log.d(TAG, "SOURCE CREATED in onEnabled");
+            source = new DataSource(context);
+            source.open();
+        }
     }
 
     @Override
     public void onDisabled(Context context) {
+        Log.d(TAG, "onDisabled");
         super.onDisabled(context);
+        Log.d(TAG, "SOURCE DELETED in onDisabled");
         if (source != null) {
             source.close();
         }
@@ -35,12 +46,22 @@ public class MetroTimeProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager,
             int[] appWidgetIds) {
+        Log.d(TAG, "onUpdate");
         final int N = appWidgetIds.length;
+
+        if (source == null) {
+            Log.d(TAG, "SOURCE CREATED in onUpdate");
+            source = new DataSource(context);
+            source.open();
+        }
 
         for (int i = 0; i < N; i++) {
             int appWidgetId = appWidgetIds[i];
             int stationId = MetroTimeConfiguration.loadStationId(context, appWidgetId);
-            updateAppWidget(context, appWidgetManager, appWidgetId, source.getStation(stationId));
+            if (stationId != -1) {
+                updateAppWidget(context, appWidgetManager, appWidgetId,
+                        source.getStation(stationId));
+            }
         }
     }
 
@@ -55,6 +76,13 @@ public class MetroTimeProvider extends AppWidgetProvider {
                 station.getLines() == RailwayLines.GREEN ? View.VISIBLE : View.GONE);
         views.setViewVisibility(R.id.widget_line_yellow,
                 station.getLines() == RailwayLines.YELLOW ? View.VISIBLE : View.GONE);
+
+        Intent intent = new Intent(context, DeparturesService.class);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+        intent.putExtra("random", intent_counter);
+        intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
+        views.setRemoteAdapter(appWidgetId, R.id.widget_list, intent);
+        intent_counter++;
 
         manager.updateAppWidget(appWidgetId, views);
     }

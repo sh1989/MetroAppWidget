@@ -104,11 +104,7 @@ public class MetroTimeConfiguration extends Activity {
     static int loadStationId(Context context, int appWidgetId) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
         int prefix = prefs.getInt(PREF_PREFIX_KEY + appWidgetId, -1);
-        if (prefix != -1) {
-            return prefix;
-        } else {
-            return 0;
-        }
+        return prefix;
     }
 
     static void deleteStationId(Context context, int appWidgetId) {

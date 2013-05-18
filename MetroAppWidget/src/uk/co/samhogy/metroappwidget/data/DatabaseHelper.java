@@ -53,8 +53,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             {
                 s.clearBindings();
                 String[] rowData = line.split(",");
-                s.bindString(0, rowData[0]);
-                s.bindLong(1, Integer.parseInt(rowData[1]));
+                s.bindString(1, rowData[0]);
+                s.bindLong(2, Integer.parseInt(rowData[1]));
 
                 s.execute();
             }

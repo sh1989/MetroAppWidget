@@ -7,11 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
-import android.view.View;
 import android.widget.RemoteViews;
 
 import uk.co.samhogy.metroappwidget.data.DataSource;
-import uk.co.samhogy.metroappwidget.data.RailwayLines;
 import uk.co.samhogy.metroappwidget.data.Station;
 
 public class MetroTimeProvider extends AppWidgetProvider {
@@ -70,12 +68,18 @@ public class MetroTimeProvider extends AppWidgetProvider {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
         views.setTextViewText(R.id.widget_title, station.getName());
 
-        views.setViewVisibility(R.id.widget_line_all,
-                station.getLines() == RailwayLines.ALL ? View.VISIBLE : View.GONE);
-        views.setViewVisibility(R.id.widget_line_green,
-                station.getLines() == RailwayLines.GREEN ? View.VISIBLE : View.GONE);
-        views.setViewVisibility(R.id.widget_line_yellow,
-                station.getLines() == RailwayLines.YELLOW ? View.VISIBLE : View.GONE);
+        switch (station.getLines()) {
+            case GREEN:
+                views.setImageViewResource(R.id.widget_lines, R.color.line_green);
+                break;
+            case YELLOW:
+                views.setImageViewResource(R.id.widget_lines, R.color.line_yellow);
+                break;
+            case ALL:
+            default:
+                views.setImageViewResource(R.id.widget_lines, R.drawable.shape_all_lines);
+                break;
+        }
 
         Intent intent = new Intent(context, DeparturesService.class);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);

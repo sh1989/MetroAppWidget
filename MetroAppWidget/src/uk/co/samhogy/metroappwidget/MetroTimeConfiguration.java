@@ -1,17 +1,15 @@
 
 package uk.co.samhogy.metroappwidget;
 
-import android.app.Activity;
+import android.app.ListActivity;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.Spinner;
+import android.widget.ListView;
 
 import uk.co.samhogy.metroappwidget.data.DataSource;
 import uk.co.samhogy.metroappwidget.data.Station;
@@ -19,12 +17,11 @@ import uk.co.samhogy.metroappwidget.data.Station;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class MetroTimeConfiguration extends Activity {
+public class MetroTimeConfiguration extends ListActivity {
 
     private static final String PREFS_NAME = "uk.co.samhogy.metroappwidget.MetroTimeConfiguration";
     private static final String PREF_PREFIX_KEY = "prefix_";
 
-    private Spinner stationText;
     private int appWidgetId;
 
     private DataSource source;
@@ -35,44 +32,6 @@ public class MetroTimeConfiguration extends Activity {
         super.onCreate(savedInstanceState);
 
         setResult(RESULT_CANCELED);
-        setContentView(R.layout.widget_configure);
-
-        source = new DataSource(this);
-        source.open();
-        stations = source.getStations();
-        Collections.sort(stations);
-
-        stationText = (Spinner) findViewById(R.id.configure_station);
-
-        ArrayAdapter<Station> dataAdapter = new ArrayAdapter<Station>(this,
-                android.R.layout.simple_spinner_item, stations);
-        dataAdapter
-                .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        stationText.setAdapter(dataAdapter);
-
-        Button accept = (Button) findViewById(R.id.configure_accept);
-        accept.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                final Context context = MetroTimeConfiguration.this;
-                final Station station = (Station) stationText.getSelectedItem();
-
-                saveStationId(context, station.getId(), appWidgetId);
-
-                AppWidgetManager manager = AppWidgetManager
-                        .getInstance(context);
-                MetroTimeProvider.updateAppWidget(context, manager,
-                        appWidgetId, station);
-
-                Intent result = new Intent();
-                result.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
-                        appWidgetId);
-                setResult(RESULT_OK, result);
-                finish();
-            }
-
-        });
 
         Intent i = getIntent();
         Bundle extras = i.getExtras();
@@ -84,6 +43,28 @@ public class MetroTimeConfiguration extends Activity {
         if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
             finish();
         }
+
+        source = new DataSource(this);
+        source.open();
+        stations = source.getStations();
+        Collections.sort(stations);
+
+        setListAdapter(new ArrayAdapter<Station>(this, android.R.layout.simple_list_item_1,
+                stations));
+    }
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        final Station station = stations.get(position);
+        saveStationId(this, station.getId(), appWidgetId);
+
+        AppWidgetManager manager = AppWidgetManager.getInstance(this);
+        MetroTimeProvider.updateAppWidget(this, manager, appWidgetId, station);
+
+        Intent result = new Intent();
+        result.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+        setResult(RESULT_OK, result);
+        finish();
     }
 
     @Override

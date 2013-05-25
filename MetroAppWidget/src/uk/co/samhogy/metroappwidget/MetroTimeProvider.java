@@ -37,7 +37,6 @@ public class MetroTimeProvider extends AppWidgetProvider {
         if (source != null) {
             source.close();
         }
-
     }
 
     // Called every updatePeriodMillis
@@ -89,6 +88,7 @@ public class MetroTimeProvider extends AppWidgetProvider {
         intent_counter++;
 
         manager.updateAppWidget(appWidgetId, views);
+        manager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_list);
     }
 
     @Override

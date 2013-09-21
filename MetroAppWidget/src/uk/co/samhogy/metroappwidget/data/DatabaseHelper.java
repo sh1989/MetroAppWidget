@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
+import android.provider.BaseColumns;
 
 import uk.co.samhogy.metroappwidget.R;
 
@@ -17,17 +18,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "mymetro.db";
     private static final int DATABASE_VERSION = 1;
 
-    public static final String TABLE_STATIONS = "stations";
-    public static final String COLUMN_UID = "_id";
-    public static final String COLUMN_STATIONNAME = "stationname";
-    public static final String COLUMN_LINES = "lines";
-
     private static final String STATIONS_CREATE =
-            "CREATE TABLE " + TABLE_STATIONS +
-                    "( " + COLUMN_UID + " integer primary key autoincrement, " +
-                    COLUMN_STATIONNAME + " text not null, " +
-                    COLUMN_LINES + " integer " +
-                    ")";
+            "CREATE TABLE " + Tables.STATIONS + "( "
+                    + BaseColumns._ID + " integer primary key autoincrement, "
+                    + StationColumns.STATION_NAME + " text not null, "
+                    + StationColumns.LINES + " integer "
+                    + ")";
 
     private final Context ctx;
 
@@ -40,8 +36,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase database) {
         database.execSQL(STATIONS_CREATE);
 
-        String sql = "INSERT INTO " + TABLE_STATIONS + " ( " + COLUMN_STATIONNAME + ", "
-                + COLUMN_LINES + " ) VALUES (?, ?)";
+        String sql = "INSERT INTO " + Tables.STATIONS
+                + " ( " + StationColumns.STATION_NAME + ", " + StationColumns.LINES + " ) "
+                + "VALUES (?, ?)";
 
         database.beginTransaction();
         SQLiteStatement s = database.compileStatement(sql);
@@ -74,7 +71,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
-        database.execSQL("DROP TABLE IF EXISTS " + TABLE_STATIONS);
+        database.execSQL("DROP TABLE IF EXISTS " + Tables.STATIONS);
         onCreate(database);
     }
 }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.provider.BaseColumns;
 
 import uk.co.samhogy.metroappwidget.model.RailwayLines;
 import uk.co.samhogy.metroappwidget.model.Station;
@@ -16,9 +17,9 @@ public class DataSource {
     private final DatabaseHelper helper;
     private final String[] allStationColumns =
     {
-            DatabaseHelper.COLUMN_UID,
-            DatabaseHelper.COLUMN_STATIONNAME,
-            DatabaseHelper.COLUMN_LINES
+            BaseColumns._ID,
+            StationColumns.STATION_NAME,
+            StationColumns.LINES
     };
 
     public DataSource(Context context) {
@@ -35,7 +36,7 @@ public class DataSource {
 
     public ArrayList<Station> getStations() {
         ArrayList<Station> stations = new ArrayList<Station>();
-        Cursor c = database.query(DatabaseHelper.TABLE_STATIONS, allStationColumns, null, null,
+        Cursor c = database.query(Tables.STATIONS, allStationColumns, null, null,
                 null, null, null);
         c.moveToFirst();
         while (!c.isAfterLast()) {
@@ -46,8 +47,8 @@ public class DataSource {
     }
 
     public Station getStation(int stationId) {
-        Cursor c = database.query(DatabaseHelper.TABLE_STATIONS, allStationColumns,
-                DatabaseHelper.COLUMN_UID + " = ?", new String[] {
+        Cursor c = database.query(Tables.STATIONS, allStationColumns,
+                BaseColumns._ID + " = ?", new String[] {
                     Integer.toString(stationId)
                 },
                 null, null, null);

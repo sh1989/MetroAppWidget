@@ -4,23 +4,13 @@ package uk.co.samhogy.metroappwidget;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONObject;
-
-import uk.co.samhogy.metroappwidget.data.JSONParser;
 import uk.co.samhogy.metroappwidget.model.Arrival;
+import uk.co.samhogy.metroappwidget.web.JSONParser;
+import uk.co.samhogy.metroappwidget.web.StopBoardRequest;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,38 +44,8 @@ public class DeparturesService extends RemoteViewsService {
 
         @Override
         public void onDataSetChanged() {
-            Log.d("metro", "making web request: " + url);
-
-            BufferedReader in = null;
-            try {
-                HttpClient client = new DefaultHttpClient();
-                HttpGet request = new HttpGet();
-                request.setURI(URI.create(url));
-                HttpResponse response = client.execute(request);
-                in = new BufferedReader
-                        (new InputStreamReader(response.getEntity().getContent()));
-                StringBuffer sb = new StringBuffer("");
-                String line = "";
-                while ((line = in.readLine()) != null) {
-                    sb.append(line);
-                }
-                in.close();
-
-                Log.d("metro", "parsing data");
-                data = JSONParser.getArrivals(new JSONObject(sb.toString()));
-                Log.d("metro", "data: " + data.size());
-            } catch (Exception e) {
-                Log.d("metro", "oh noes");
-            } finally {
-                if (in != null) {
-                    try {
-                        in.close();
-                    } catch (IOException e) {
-                        Log.d("metro", "oh noes AGAIN");
-                    }
-                }
-            }
-            Log.d("metro", "returning");
+            final String response = StopBoardRequest.getTimesForStation(url);
+            data = JSONParser.getArrivals(response);
         }
 
         @Override

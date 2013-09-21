@@ -1,5 +1,7 @@
 
-package uk.co.samhogy.metroappwidget.data;
+package uk.co.samhogy.metroappwidget.web;
+
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,10 +15,11 @@ import java.util.List;
 
 public class JSONParser {
 
-    public static List<Arrival> getArrivals(JSONObject json) {
+    public static List<Arrival> getArrivals(String response) {
         List<Arrival> data = new ArrayList<Arrival>();
 
         try {
+            JSONObject json = new JSONObject(response);
             JSONArray arrivals = json.getJSONArray("arrivals");
             JSONObject arrival;
             for (int i = 0; i < arrivals.length(); i++) {
@@ -27,6 +30,7 @@ public class JSONParser {
                         timeOnly(arrival.getString("scheduledTime"))));
             }
         } catch (JSONException e) {
+            Log.e("MetroAppWidget", "Unable to parse JSON response", e);
         }
 
         Collections.sort(data);

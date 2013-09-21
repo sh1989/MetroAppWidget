@@ -69,6 +69,7 @@ public class DeparturesService extends RemoteViewsService {
             Arrival arrival = data.get(position);
 
             RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.list_row);
+            rv.setTextViewText(R.id.row_platform, Integer.toString(arrival.getPlatform()));
             rv.setTextViewText(R.id.row_destination, arrival.getDestination());
             rv.setTextViewText(R.id.row_time, arrival.getTime());
             return rv;

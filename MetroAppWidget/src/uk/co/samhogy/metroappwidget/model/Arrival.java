@@ -37,13 +37,6 @@ public class Arrival implements Comparable<Arrival> {
 
     @Override
     public int compareTo(Arrival another) {
-        final int BEFORE = -1;
-        final int AFTER = 1;
-
-        if (platform == another.platform) {
-            return date.compareTo(another.date);
-        } else {
-            return platform < another.platform ? BEFORE : AFTER;
-        }
+        return date.compareTo(another.date);
     }
 }

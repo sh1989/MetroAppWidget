@@ -16,7 +16,7 @@ import java.util.List;
 public class JSONParser {
 
     public static List<Arrival> getArrivals(String response) {
-        List<Arrival> data = new ArrayList<Arrival>();
+        final List<Arrival> data = new ArrayList<Arrival>();
 
         try {
             JSONObject json = new JSONObject(response);

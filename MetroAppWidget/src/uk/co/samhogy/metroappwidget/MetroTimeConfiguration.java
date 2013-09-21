@@ -12,7 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import uk.co.samhogy.metroappwidget.data.DataSource;
-import uk.co.samhogy.metroappwidget.data.Station;
+import uk.co.samhogy.metroappwidget.model.Station;
 
 import java.util.ArrayList;
 import java.util.Collections;

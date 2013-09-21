@@ -14,8 +14,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONObject;
 
-import uk.co.samhogy.metroappwidget.data.Arrival;
 import uk.co.samhogy.metroappwidget.data.JSONParser;
+import uk.co.samhogy.metroappwidget.model.Arrival;
 
 import java.io.BufferedReader;
 import java.io.IOException;

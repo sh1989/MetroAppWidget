@@ -6,6 +6,9 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
+import uk.co.samhogy.metroappwidget.model.RailwayLines;
+import uk.co.samhogy.metroappwidget.model.Station;
+
 import java.util.ArrayList;
 
 public class DataSource {

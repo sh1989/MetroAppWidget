@@ -10,7 +10,7 @@ import android.util.Log;
 import android.widget.RemoteViews;
 
 import uk.co.samhogy.metroappwidget.data.DataSource;
-import uk.co.samhogy.metroappwidget.data.Station;
+import uk.co.samhogy.metroappwidget.model.Station;
 
 public class MetroTimeProvider extends AppWidgetProvider {
 

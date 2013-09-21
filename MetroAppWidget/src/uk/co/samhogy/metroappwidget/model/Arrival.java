@@ -1,5 +1,5 @@
 
-package uk.co.samhogy.metroappwidget.data;
+package uk.co.samhogy.metroappwidget.model;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

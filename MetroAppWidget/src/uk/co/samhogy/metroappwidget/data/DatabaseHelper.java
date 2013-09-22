@@ -22,7 +22,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "CREATE TABLE " + Tables.STATIONS + "( "
                     + BaseColumns._ID + " integer primary key autoincrement, "
                     + StationColumns.STATION_NAME + " text not null, "
-                    + StationColumns.LINES + " integer "
+                    + StationColumns.LINES + " integer, "
+                    + StationColumns.URL + " text not null"
                     + ")";
 
     private final Context ctx;
@@ -37,8 +38,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.execSQL(STATIONS_CREATE);
 
         String sql = "INSERT INTO " + Tables.STATIONS
-                + " ( " + StationColumns.STATION_NAME + ", " + StationColumns.LINES + " ) "
-                + "VALUES (?, ?)";
+                + " ( " + StationColumns.STATION_NAME + ", " + StationColumns.LINES
+                + ", " + StationColumns.URL + " ) "
+                + "VALUES (?, ?, ?)";
 
         database.beginTransaction();
         SQLiteStatement s = database.compileStatement(sql);
@@ -52,6 +54,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 String[] rowData = line.split(",");
                 s.bindString(1, rowData[0]);
                 s.bindLong(2, Integer.parseInt(rowData[1]));
+                s.bindString(3, rowData[2]);
 
                 s.execute();
             }

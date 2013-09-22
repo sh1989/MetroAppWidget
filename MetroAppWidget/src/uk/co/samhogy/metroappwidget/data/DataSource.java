@@ -19,7 +19,8 @@ public class DataSource {
     {
             BaseColumns._ID,
             StationColumns.STATION_NAME,
-            StationColumns.LINES
+            StationColumns.LINES,
+            StationColumns.URL
     };
 
     public DataSource(Context context) {
@@ -70,6 +71,6 @@ public class DataSource {
             default:
                 lines = RailwayLines.ALL;
         }
-        return new Station(c.getInt(0), c.getString(1), lines);
+        return new Station(c.getInt(0), c.getString(1), lines, c.getString(3));
     }
 }

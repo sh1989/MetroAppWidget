@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import uk.co.samhogy.metroappwidget.data.DataSource;
 import uk.co.samhogy.metroappwidget.model.Arrival;
+import uk.co.samhogy.metroappwidget.model.Station;
 import uk.co.samhogy.metroappwidget.web.JSONParser;
 import uk.co.samhogy.metroappwidget.web.StopBoardRequest;
 
@@ -26,7 +28,8 @@ public class DeparturesService extends RemoteViewsService {
         private final Context context;
         private final int appWidgetId;
         private List<Arrival> data = new ArrayList<Arrival>();
-        private final String url = "http://myjourney.nexus.org.uk/stopBoard/410_Gateshead_(Tyne_and_Wear_Metro_Station)";
+        private final String urlPrefix = "http://myjourney.nexus.org.uk/stopBoard/";
+        private DataSource source;
 
         public ListRemoteViewsFactory(Context context, Intent i) {
             this.context = context;
@@ -36,16 +39,31 @@ public class DeparturesService extends RemoteViewsService {
 
         @Override
         public void onCreate() {
+            if (source == null) {
+                source = new DataSource(context);
+                source.open();
+            }
         }
 
         @Override
         public void onDestroy() {
+            if (source != null) {
+                source.close();
+            }
         }
 
         @Override
         public void onDataSetChanged() {
-            final String response = StopBoardRequest.getTimesForStation(url);
-            data = JSONParser.getArrivals(response);
+            final DataSource source = new DataSource(context);
+            source.open();
+
+            int stationId = MetroTimeConfiguration.loadStationId(context, appWidgetId);
+            if (stationId != -1) {
+                final Station s = source.getStation(stationId);
+
+                final String response = StopBoardRequest.getTimesForStation(urlPrefix + s.getUrl());
+                data = JSONParser.getArrivals(response);
+            }
         }
 
         @Override

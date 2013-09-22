@@ -38,11 +38,13 @@ public class JSONParser {
     }
 
     private static String stationOnly(String s) {
+        // Extract station name from destination name.
         return s.replaceAll("Newcastle", "").
                 replaceAll("Metro Station", "").
                 replaceAll("\\(city centre\\)", "").
                 replaceAll("\\(centre\\)", "").
                 replaceAll("\\(Tyne and wear\\)", "").
+                replaceFirst("Sunderland", "").
                 trim();
     }
 

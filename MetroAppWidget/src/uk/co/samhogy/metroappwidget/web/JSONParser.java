@@ -52,7 +52,8 @@ public class JSONParser {
     }
 
     private static int waitOnly(String s) {
-        s = s.replace(" min", "")
+        s = s.replace("due", "0")
+                .replace(" min", "")
                 .replace("s", "")
                 .trim();
         return Integer.parseInt(s);

@@ -27,7 +27,8 @@ public class JSONParser {
                 data.add(new Arrival(
                         arrival.getString("stopName"),
                         stationOnly(arrival.getString("destination")),
-                        timeOnly(arrival.getString("scheduledTime"))));
+                        timeOnly(arrival.getString("scheduledTime")),
+                        waitOnly(arrival.getString("estimatedWait"))));
             }
         } catch (JSONException e) {
             Log.e("MetroAppWidget", "Unable to parse JSON response", e);
@@ -48,5 +49,12 @@ public class JSONParser {
 
     private static String timeOnly(String s) {
         return s.replaceAll("[^:\\d]", "").trim();
+    }
+
+    private static int waitOnly(String s) {
+        s = s.replace(" min", "")
+                .replace("s", "")
+                .trim();
+        return Integer.parseInt(s);
     }
 }

@@ -52,7 +52,9 @@ public class JSONParser {
     }
 
     private static int waitOnly(String s) {
-        s = s.replaceAll(" mins", "").trim();
+        s = s.replace(" min", "")
+                .replace("s", "")
+                .trim();
         return Integer.parseInt(s);
     }
 }

@@ -1,36 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/widget_margin" >
+    android:background="@android:color/white"
+    android:padding="@dimen/widget_margin"
+    android:orientation="vertical" >
 
-    <LinearLayout
+    <ImageView
+        android:id="@+id/widget_lines"
+        android:layout_width="match_parent"
+        android:layout_height="8dp" />
+
+    <TextView
+        android:id="@+id/widget_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="@string/widget_prefix_default"
+        android:textSize="28sp" />
+
+    <ListView
+        android:id="@+id/widget_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white"
-        android:orientation="vertical">
+        android:cacheColorHint="@android:color/transparent"
+        android:listSelector="@android:color/transparent"
+        tools:listitem="@layout/list_row" />
 
-        <ImageView
-            android:id="@+id/widget_lines"
-            android:layout_width="match_parent"
-            android:layout_height="8dp" />
-
-        <TextView
-            android:id="@+id/widget_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="@string/widget_prefix_default"
-            android:textSize="28sp" />
-
-        <ListView
-            android:id="@+id/widget_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:listSelector="@android:color/transparent"
-            android:cacheColorHint="@android:color/transparent"
-            tools:listitem="@layout/list_row" />
-    </LinearLayout>
-
-</FrameLayout>
+</LinearLayout>

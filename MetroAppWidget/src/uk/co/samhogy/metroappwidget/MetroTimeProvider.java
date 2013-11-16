@@ -10,6 +10,7 @@ import android.util.Log;
 import android.widget.RemoteViews;
 
 import uk.co.samhogy.metroappwidget.data.DataSource;
+import uk.co.samhogy.metroappwidget.log.Logger;
 import uk.co.samhogy.metroappwidget.model.Station;
 
 public class MetroTimeProvider extends AppWidgetProvider {
@@ -17,6 +18,7 @@ public class MetroTimeProvider extends AppWidgetProvider {
     private DataSource source;
     private static int intent_counter = 0;
     private static final String TAG = "uk.co.samhogy.metroappwidget";
+    private final Logger logger = new Logger();
 
     @Override
     public void onEnabled(Context context) {
@@ -51,6 +53,8 @@ public class MetroTimeProvider extends AppWidgetProvider {
             source = new DataSource(context);
             source.open();
         }
+
+        logger.appendLog(context, "Woken up");
 
         for (int i = 0; i < N; i++) {
             int appWidgetId = appWidgetIds[i];

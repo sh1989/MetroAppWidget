@@ -1,12 +1,16 @@
 
 package uk.co.samhogy.metroappwidget.web;
 
+import android.content.Context;
 import android.util.Log;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+
+import uk.co.samhogy.metroappwidget.log.Logger;
+import uk.co.samhogy.metroappwidget.log.Time;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,8 +19,10 @@ import java.net.URI;
 
 public class StopBoardRequest {
 
-    public static String getTimesForStation(String url) {
+    public static String getTimesForStation(Context c, String url) {
         Log.d("MetroAppWidget", "making web request: " + url);
+        Logger logger = new Logger();
+        logger.appendLog(c, "Accessing URL: " + url);
 
         BufferedReader in = null;
         try {
@@ -33,9 +39,11 @@ public class StopBoardRequest {
             }
             in.close();
 
+            logger.appendLog(c, Time.now() + " Success! " + url);
             return sb.toString();
         } catch (Exception e) {
             Log.e("MetroAppWidget", "Error retrieving data from web", e);
+            logger.appendLog(c, "Error retrieving " + url + ":" + "\n" + e.getMessage());
             return "";
         } finally {
             if (in != null) {
@@ -47,5 +55,4 @@ public class StopBoardRequest {
             }
         }
     }
-
 }

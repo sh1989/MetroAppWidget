@@ -61,7 +61,8 @@ public class DeparturesService extends RemoteViewsService {
             if (stationId != -1) {
                 final Station s = source.getStation(stationId);
 
-                final String response = StopBoardRequest.getTimesForStation(urlPrefix + s.getUrl());
+                final String response = StopBoardRequest.getTimesForStation(context,
+                        urlPrefix + s.getUrl());
                 data = JSONParser.getArrivals(response);
             }
         }

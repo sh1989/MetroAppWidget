@@ -1,0 +1,23 @@
+.metadata/
+
+# built application files
+MetroAppWidget/*.apk
+MetroAppWidget/*.ap_
+
+# files for the dex VM
+MetroAppWidget/*.dex
+
+# Java class files
+MetroAppWidget/*.class
+
+# generated files
+MetroAppWidget/bin/
+MetroAppWidget/gen/
+
+# Local configuration file (sdk path, etc)
+MetroAppWidget/local.properties
+
+# Eclipse project files
+MetroAppWidget/.classpath
+MetroAppWidget/.project
+MetroAppWidget/.settings

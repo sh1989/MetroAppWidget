@@ -10,14 +10,11 @@
         android:id="@+id/widget_lines"
         android:layout_width="match_parent"
         android:layout_height="8dp" />
-
-    <TextView
+        
+    <ImageView
         android:id="@+id/widget_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:text="@string/widget_prefix_default"
-        android:textSize="28sp" />
+        android:layout_height="28dp" />
 
     <ListView
         android:id="@+id/widget_list"

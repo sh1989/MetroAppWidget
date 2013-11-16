@@ -5,8 +5,14 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.util.Log;
+import android.util.TypedValue;
 import android.widget.RemoteViews;
 
 import uk.co.samhogy.metroappwidget.data.DataSource;
@@ -65,7 +71,7 @@ public class MetroTimeProvider extends AppWidgetProvider {
     static void updateAppWidget(Context context,
             AppWidgetManager manager, int appWidgetId, Station station) {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
-        views.setTextViewText(R.id.widget_title, station.getName());
+        views.setImageViewBitmap(R.id.widget_title, buildUpdate(context, station.getName()));
 
         switch (station.getLines()) {
             case GREEN:
@@ -89,6 +95,32 @@ public class MetroTimeProvider extends AppWidgetProvider {
 
         manager.updateAppWidget(appWidgetId, views);
         manager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_list);
+    }
+
+    static Bitmap buildUpdate(Context context, String text)
+    {
+        int fontSizePX = convertDiptoPix(context, 28);
+        int pad = (fontSizePX / 9);
+        Paint paint = new Paint();
+        Typeface typeface = Typeface.createFromAsset(context.getAssets(), "fonts/Calvert.ttf");
+        paint.setAntiAlias(true);
+        paint.setTypeface(typeface);
+        paint.setColor(Color.BLACK);
+        paint.setTextSize(fontSizePX);
+
+        int textWidth = (int) (paint.measureText(text) + pad * 2);
+        int height = (int) (fontSizePX / 0.75);
+        Bitmap bitmap = Bitmap.createBitmap(textWidth, height, Bitmap.Config.ARGB_4444);
+        Canvas canvas = new Canvas(bitmap);
+        float xOriginal = pad;
+        canvas.drawText(text, xOriginal, fontSizePX, paint);
+        return bitmap;
+    }
+
+    static int convertDiptoPix(Context context, float dip) {
+        int value = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dip, context
+                .getResources().getDisplayMetrics());
+        return value;
     }
 
     @Override

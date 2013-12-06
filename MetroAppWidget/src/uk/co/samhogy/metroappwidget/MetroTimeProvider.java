@@ -84,7 +84,7 @@ public class MetroTimeProvider extends AppWidgetProvider {
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         intent.putExtra("random", intent_counter);
         intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-        views.setRemoteAdapter(appWidgetId, R.id.widget_list, intent);
+        views.setRemoteAdapter(R.id.widget_list, intent);
         intent_counter++;
 
         manager.updateAppWidget(appWidgetId, views);

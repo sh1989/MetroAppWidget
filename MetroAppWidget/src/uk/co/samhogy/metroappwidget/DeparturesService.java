@@ -4,6 +4,9 @@ package uk.co.samhogy.metroappwidget;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -28,7 +31,7 @@ public class DeparturesService extends RemoteViewsService {
         private final Context context;
         private final int appWidgetId;
         private List<Arrival> data = new ArrayList<Arrival>();
-        private final String urlPrefix = "http://myjourney.nexus.org.uk/stopBoard/";
+        private static final String urlPrefix = "http://myjourney.nexus.org.uk/stopBoard/";
         private DataSource source;
 
         public ListRemoteViewsFactory(Context context, Intent i) {
@@ -54,16 +57,29 @@ public class DeparturesService extends RemoteViewsService {
 
         @Override
         public void onDataSetChanged() {
-            final DataSource source = new DataSource(context);
-            source.open();
+            if (haveInternetAccess()) {
+                int stationId = MetroTimeConfiguration.loadStationId(context, appWidgetId);
+                if (stationId != -1) {
+                    final Station s = source.getStation(stationId);
 
-            int stationId = MetroTimeConfiguration.loadStationId(context, appWidgetId);
-            if (stationId != -1) {
-                final Station s = source.getStation(stationId);
-
-                final String response = StopBoardRequest.getTimesForStation(urlPrefix + s.getUrl());
-                data = JSONParser.getArrivals(response);
+                    final String response =
+                            StopBoardRequest.getTimesForStation(urlPrefix + s.getUrl());
+                    data = JSONParser.getArrivals(response);
+                }
             }
+            else {
+                Log.d("MetroAppWidget", "No interweb connection detected, bailing out.");
+                data.clear();
+            }
+        }
+
+        private boolean haveInternetAccess()
+        {
+            final ConnectivityManager manager = (ConnectivityManager) context
+                    .getSystemService(CONNECTIVITY_SERVICE);
+
+            NetworkInfo activeNetworkInfo = manager.getActiveNetworkInfo();
+            return activeNetworkInfo != null && activeNetworkInfo.isConnected();
         }
 
         @Override

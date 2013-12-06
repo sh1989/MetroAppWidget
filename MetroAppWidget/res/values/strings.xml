@@ -2,7 +2,7 @@
 
     <string name="app_name">MetroAppWidget</string>
     <string name="hint_station">Station Name</string>
-    <string name="btn_add">Add</string>
     <string name="widget_prefix_default">Monkseaton</string>
+    <string name="error_text">Failed to load timetable</string>
 
 </resources>

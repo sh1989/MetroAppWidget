@@ -65,6 +65,7 @@ public class MetroTimeProvider extends AppWidgetProvider {
     static void updateAppWidget(Context context,
             AppWidgetManager manager, int appWidgetId, Station station) {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
+        views.setEmptyView(R.id.widget_list, R.id.empty_view);
         views.setTextViewText(R.id.widget_title, station.getName());
 
         switch (station.getLines()) {

@@ -55,7 +55,7 @@ public class MetroTimeProvider extends AppWidgetProvider {
 
         for (int i = 0; i < N; i++) {
             int appWidgetId = appWidgetIds[i];
-            int stationId = MetroTimeConfiguration.loadStationId(context, appWidgetId);
+            int stationId = ActiveWidgets.stationIdForWidget(context, appWidgetId);
             if (stationId != -1) {
                 updateAppWidget(context, appWidgetManager, appWidgetId,
                         source.getStation(stationId));
@@ -68,20 +68,10 @@ public class MetroTimeProvider extends AppWidgetProvider {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
         views.setEmptyView(R.id.widget_list, R.id.empty_view);
         views.setViewVisibility(R.id.empty_view, View.GONE);
-        views.setTextViewText(R.id.widget_title, station.getName());
+        views.setTextViewText(R.id.widget_title, station.name());
 
-        switch (station.getLines()) {
-            case GREEN:
-                views.setImageViewResource(R.id.widget_lines, R.color.line_green);
-                break;
-            case YELLOW:
-                views.setImageViewResource(R.id.widget_lines, R.color.line_yellow);
-                break;
-            case ALL:
-            default:
-                views.setImageViewResource(R.id.widget_lines, R.drawable.shape_all_lines);
-                break;
-        }
+        views.setImageViewResource(
+                R.id.widget_lines, station.railwayLinesResourceId());
 
         Intent intent = new Intent(context, DeparturesService.class);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
@@ -99,7 +89,7 @@ public class MetroTimeProvider extends AppWidgetProvider {
         final int N = appWidgetIds.length;
 
         for (int i = 0; i < N; i++) {
-            MetroTimeConfiguration.deleteStationId(context, appWidgetIds[i]);
+            ActiveWidgets.deleteWidget(context, appWidgetIds[i]);
         }
     }
 

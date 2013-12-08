@@ -58,12 +58,12 @@ public class DeparturesService extends RemoteViewsService {
         @Override
         public void onDataSetChanged() {
             if (haveInternetAccess()) {
-                int stationId = MetroTimeConfiguration.loadStationId(context, appWidgetId);
+                int stationId = ActiveWidgets.stationIdForWidget(context, appWidgetId);
                 if (stationId != -1) {
                     final Station s = source.getStation(stationId);
 
                     final String response =
-                            StopBoardRequest.getTimesForStation(urlPrefix + s.getUrl());
+                            StopBoardRequest.getTimesForStation(urlPrefix + s.timetableUrl());
                     data = JSONParser.getArrivals(response);
                 }
             }

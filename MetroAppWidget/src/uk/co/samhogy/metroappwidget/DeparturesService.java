@@ -94,19 +94,22 @@ public class DeparturesService extends RemoteViewsService {
 
         @Override
         public RemoteViews getLoadingView() {
-            // Get the default loading view.
-            return null;
+            return layout(R.layout.list_loading);
         }
 
         @Override
         public RemoteViews getViewAt(int position) {
             Arrival arrival = data.get(position);
 
-            RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.list_row);
+            RemoteViews rv = layout(R.layout.list_row);
             rv.setTextViewText(R.id.row_platform, Integer.toString(arrival.getPlatform()));
             rv.setTextViewText(R.id.row_destination, arrival.getDestination());
             rv.setTextViewText(R.id.row_time, arrival.getTime());
             return rv;
+        }
+
+        private RemoteViews layout(int resourceId) {
+            return new RemoteViews(context.getPackageName(), resourceId);
         }
 
         @Override

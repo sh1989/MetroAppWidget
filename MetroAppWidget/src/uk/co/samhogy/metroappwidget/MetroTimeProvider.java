@@ -12,7 +12,6 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -40,18 +39,16 @@ public class MetroTimeProvider extends AppWidgetProvider {
     public void onDisabled(Context context) {
         Log.d(TAG, "onDisabled");
         super.onDisabled(context);
-        Log.d(TAG, "SOURCE DELETED in onDisabled");
         if (source != null) {
+            Log.d(TAG, "SOURCE DELETED in onDisabled");
             source.close();
         }
     }
 
-    // Called every updatePeriodMillis
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager,
             int[] appWidgetIds) {
         Log.d(TAG, "onUpdate");
-        final int N = appWidgetIds.length;
 
         if (source == null) {
             Log.d(TAG, "SOURCE CREATED in onUpdate");
@@ -59,8 +56,7 @@ public class MetroTimeProvider extends AppWidgetProvider {
             source.open();
         }
 
-        for (int i = 0; i < N; i++) {
-            int appWidgetId = appWidgetIds[i];
+        for (int appWidgetId : appWidgetIds) {
             int stationId = ActiveWidgets.stationIdForWidget(context, appWidgetId);
             if (stationId != -1) {
                 updateAppWidget(context, appWidgetManager, appWidgetId,
@@ -115,10 +111,8 @@ public class MetroTimeProvider extends AppWidgetProvider {
 
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
-        final int N = appWidgetIds.length;
-
-        for (int i = 0; i < N; i++) {
-            ActiveWidgets.deleteWidget(context, appWidgetIds[i]);
+        for (int appWidgetId : appWidgetIds) {
+            ActiveWidgets.deleteWidget(context, appWidgetId);
         }
     }
 

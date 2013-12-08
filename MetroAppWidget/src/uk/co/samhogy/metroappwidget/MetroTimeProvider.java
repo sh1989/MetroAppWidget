@@ -55,7 +55,7 @@ public class MetroTimeProvider extends AppWidgetProvider {
 
         for (int i = 0; i < N; i++) {
             int appWidgetId = appWidgetIds[i];
-            int stationId = MetroTimeConfiguration.loadStationId(context, appWidgetId);
+            int stationId = ActiveWidgets.stationIdForWidget(context, appWidgetId);
             if (stationId != -1) {
                 updateAppWidget(context, appWidgetManager, appWidgetId,
                         source.getStation(stationId));
@@ -89,7 +89,7 @@ public class MetroTimeProvider extends AppWidgetProvider {
         final int N = appWidgetIds.length;
 
         for (int i = 0; i < N; i++) {
-            MetroTimeConfiguration.deleteStationId(context, appWidgetIds[i]);
+            ActiveWidgets.deleteWidget(context, appWidgetIds[i]);
         }
     }
 

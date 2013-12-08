@@ -19,12 +19,27 @@
         android:text="@string/widget_prefix_default"
         android:textSize="28sp" />
 
-    <ListView
-        android:id="@+id/widget_list"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:cacheColorHint="@android:color/transparent"
-        android:listSelector="@android:color/transparent"
-        tools:listitem="@layout/list_row" />
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+
+        <ListView
+            android:id="@+id/widget_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:cacheColorHint="@android:color/transparent"
+            android:listSelector="@android:color/transparent"
+            tools:listitem="@layout/list_row" />
+
+        <TextView
+            android:id="@+id/empty_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:gravity="center"
+            android:text="@string/error_text"
+            android:textSize="18sp" />
+    </FrameLayout>
 
 </LinearLayout>

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import uk.co.samhogy.metroappwidget.data.DataSource;
@@ -65,6 +66,8 @@ public class MetroTimeProvider extends AppWidgetProvider {
     static void updateAppWidget(Context context,
             AppWidgetManager manager, int appWidgetId, Station station) {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
+        views.setEmptyView(R.id.widget_list, R.id.empty_view);
+        views.setViewVisibility(R.id.empty_view, View.GONE);
         views.setTextViewText(R.id.widget_title, station.getName());
 
         switch (station.getLines()) {
@@ -84,7 +87,7 @@ public class MetroTimeProvider extends AppWidgetProvider {
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         intent.putExtra("random", intent_counter);
         intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-        views.setRemoteAdapter(appWidgetId, R.id.widget_list, intent);
+        views.setRemoteAdapter(R.id.widget_list, intent);
         intent_counter++;
 
         manager.updateAppWidget(appWidgetId, views);

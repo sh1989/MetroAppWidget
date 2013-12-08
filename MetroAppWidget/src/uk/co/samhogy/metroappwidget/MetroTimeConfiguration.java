@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import uk.co.samhogy.metroappwidget.data.DataSource;
@@ -49,14 +48,13 @@ public class MetroTimeConfiguration extends ListActivity {
         stations = source.getStations();
         Collections.sort(stations);
 
-        setListAdapter(new ArrayAdapter<Station>(this, android.R.layout.simple_list_item_1,
-                stations));
+        setListAdapter(new StationListAdapter(this, stations));
     }
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         final Station station = stations.get(position);
-        saveStationId(this, station.getId(), appWidgetId);
+        saveStationId(this, station.id(), appWidgetId);
 
         AppWidgetManager manager = AppWidgetManager.getInstance(this);
         MetroTimeProvider.updateAppWidget(this, manager, appWidgetId, station);

@@ -20,7 +20,6 @@ import uk.co.samhogy.metroappwidget.model.Station;
 public class MetroTimeProvider extends AppWidgetProvider {
 
     private DataSource source;
-    private static int intent_counter = 0;
 
     @Override
     public void onEnabled(Context context) {
@@ -75,10 +74,8 @@ public class MetroTimeProvider extends AppWidgetProvider {
 
         Intent intent = new Intent(context, DeparturesService.class);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        intent.putExtra("random", intent_counter);
         intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
         views.setRemoteAdapter(R.id.widget_list, intent);
-        intent_counter++;
 
         manager.updateAppWidget(appWidgetId, views);
         manager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_list);

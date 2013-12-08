@@ -3,27 +3,27 @@ package uk.co.samhogy.metroappwidget.model;
 
 public class Arrival implements Comparable<Arrival> {
 
-    final int platform;
+    final String platform;
     final String destination;
     final String time;
     final int estimatedWait;
 
     public Arrival(String platform, String destination, String time, int estimatedWait) {
-        this.platform = Integer.parseInt(platform);
+        this.platform = platform;
         this.destination = destination;
         this.time = time;
         this.estimatedWait = estimatedWait;
     }
 
-    public int getPlatform() {
+    public String platform() {
         return platform;
     }
 
-    public String getDestination() {
+    public String destination() {
         return destination;
     }
 
-    public String getTime() {
+    public String time() {
         return time;
     }
 

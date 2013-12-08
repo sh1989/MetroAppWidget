@@ -37,10 +37,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase database) {
         database.execSQL(STATIONS_CREATE);
 
-        String sql = "INSERT INTO " + Tables.STATIONS
-                + " ( " + StationColumns.STATION_NAME + ", " + StationColumns.LINES
-                + ", " + StationColumns.URL + " ) "
-                + "VALUES (?, ?, ?)";
+        String sql = "INSERT INTO " + Tables.STATIONS + " ( "
+                + StationColumns.STATION_NAME + ", "
+                + StationColumns.LINES
+                + ", " + StationColumns.URL 
+                + " ) " + "VALUES (?, ?, ?)";
 
         database.beginTransaction();
         SQLiteStatement s = database.compileStatement(sql);

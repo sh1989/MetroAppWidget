@@ -5,8 +5,14 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -68,7 +74,7 @@ public class MetroTimeProvider extends AppWidgetProvider {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
         views.setEmptyView(R.id.widget_list, R.id.empty_view);
         views.setViewVisibility(R.id.empty_view, View.GONE);
-        views.setTextViewText(R.id.widget_title, station.name());
+        views.setImageViewBitmap(R.id.widget_title, buildUpdate(context, station.name()));
 
         views.setImageViewResource(
                 R.id.widget_lines, station.railwayLinesResourceId());
@@ -82,6 +88,29 @@ public class MetroTimeProvider extends AppWidgetProvider {
 
         manager.updateAppWidget(appWidgetId, views);
         manager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_list);
+    }
+
+    static Bitmap buildUpdate(Context context, String text)
+    {
+        final float density =
+                context.getResources().getDisplayMetrics().density;
+        final int fontSize = (int) (28 * density);
+        final int padding = (fontSize / 4);
+
+        final Paint paint = new Paint();
+        final Typeface typeface = Typeface.createFromAsset(context.getAssets(), "fonts/Calvert.ttf");
+        paint.setAntiAlias(true);
+        paint.setTypeface(typeface);
+        paint.setColor(Color.BLACK);
+        paint.setTextSize(fontSize);
+
+        final int textWidth = (int) (paint.measureText(text) + padding * 2);
+        final int height = (int) (fontSize / 0.75);
+        final Bitmap bitmap = Bitmap.createBitmap(textWidth, height, Bitmap.Config.ARGB_8888);
+        final Canvas canvas = new Canvas(bitmap);
+        canvas.drawText(text, padding, fontSize, paint);
+
+        return bitmap;
     }
 
     @Override

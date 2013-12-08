@@ -1,12 +1,12 @@
 
 package uk.co.samhogy.metroappwidget.web;
 
-import android.util.Log;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+
+import uk.co.samhogy.metroappwidget.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,7 +16,7 @@ import java.net.URI;
 public class StopBoardRequest {
 
     public static String getTimesForStation(String url) {
-        Log.d("MetroAppWidget", "making web request: " + url);
+        Log.debug("making web request: " + url);
 
         BufferedReader in = null;
         try {
@@ -35,14 +35,14 @@ public class StopBoardRequest {
 
             return sb.toString();
         } catch (Exception e) {
-            Log.e("MetroAppWidget", "Error retrieving data from web", e);
+            Log.error("Error retrieving data from web", e);
             return "";
         } finally {
             if (in != null) {
                 try {
                     in.close();
                 } catch (IOException e) {
-                    Log.e("MetroAppWidget", "Failed to close input stream.", e);
+                    Log.error("Failed to close input stream.", e);
                 }
             }
         }

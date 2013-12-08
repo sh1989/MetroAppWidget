@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -68,7 +67,7 @@ public class DeparturesService extends RemoteViewsService {
                 }
             }
             else {
-                Log.d("MetroAppWidget", "No interweb connection detected, bailing out.");
+                Log.debug("No interweb connection detected, bailing out.");
                 data.clear();
             }
         }

@@ -11,7 +11,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -22,14 +21,13 @@ public class MetroTimeProvider extends AppWidgetProvider {
 
     private DataSource source;
     private static int intent_counter = 0;
-    private static final String TAG = "uk.co.samhogy.metroappwidget";
 
     @Override
     public void onEnabled(Context context) {
-        Log.d(TAG, "onEnabled");
+        Log.debug("onEnabled");
         super.onEnabled(context);
         if (source == null) {
-            Log.d(TAG, "SOURCE CREATED in onEnabled");
+            Log.debug("SOURCE CREATED in onEnabled");
             source = new DataSource(context);
             source.open();
         }
@@ -37,10 +35,10 @@ public class MetroTimeProvider extends AppWidgetProvider {
 
     @Override
     public void onDisabled(Context context) {
-        Log.d(TAG, "onDisabled");
+        Log.debug("onDisabled");
         super.onDisabled(context);
         if (source != null) {
-            Log.d(TAG, "SOURCE DELETED in onDisabled");
+            Log.debug("SOURCE DELETED in onDisabled");
             source.close();
         }
     }
@@ -48,10 +46,10 @@ public class MetroTimeProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager,
             int[] appWidgetIds) {
-        Log.d(TAG, "onUpdate");
+        Log.debug("onUpdate");
 
         if (source == null) {
-            Log.d(TAG, "SOURCE CREATED in onUpdate");
+            Log.debug("SOURCE CREATED in onUpdate");
             source = new DataSource(context);
             source.open();
         }

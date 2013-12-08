@@ -1,7 +1,6 @@
 
 package uk.co.samhogy.metroappwidget.model;
 
-
 public class Arrival implements Comparable<Arrival> {
 
     final int platform;

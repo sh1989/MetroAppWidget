@@ -1,12 +1,11 @@
 
 package uk.co.samhogy.metroappwidget.web;
 
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import uk.co.samhogy.metroappwidget.Log;
 import uk.co.samhogy.metroappwidget.model.Arrival;
 
 import java.util.ArrayList;
@@ -37,7 +36,7 @@ public class JSONParser {
                         waitOnly(arrival.getString(ESTIMATED_WAIT))));
             }
         } catch (JSONException e) {
-            Log.e("MetroAppWidget", "Unable to parse JSON response", e);
+            Log.error("Unable to parse JSON response", e);
         }
 
         Collections.sort(data);

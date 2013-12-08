@@ -13,6 +13,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import uk.co.samhogy.metroappwidget.data.DataSource;
@@ -60,7 +61,7 @@ public class MetroTimeProvider extends AppWidgetProvider {
 
         for (int i = 0; i < N; i++) {
             int appWidgetId = appWidgetIds[i];
-            int stationId = MetroTimeConfiguration.loadStationId(context, appWidgetId);
+            int stationId = ActiveWidgets.stationIdForWidget(context, appWidgetId);
             if (stationId != -1) {
                 updateAppWidget(context, appWidgetManager, appWidgetId,
                         source.getStation(stationId));
@@ -71,26 +72,18 @@ public class MetroTimeProvider extends AppWidgetProvider {
     static void updateAppWidget(Context context,
             AppWidgetManager manager, int appWidgetId, Station station) {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
-        views.setImageViewBitmap(R.id.widget_title, buildUpdate(context, station.getName()));
+        views.setEmptyView(R.id.widget_list, R.id.empty_view);
+        views.setViewVisibility(R.id.empty_view, View.GONE);
+        views.setImageViewBitmap(R.id.widget_title, buildUpdate(context, station.name()));
 
-        switch (station.getLines()) {
-            case GREEN:
-                views.setImageViewResource(R.id.widget_lines, R.color.line_green);
-                break;
-            case YELLOW:
-                views.setImageViewResource(R.id.widget_lines, R.color.line_yellow);
-                break;
-            case ALL:
-            default:
-                views.setImageViewResource(R.id.widget_lines, R.drawable.shape_all_lines);
-                break;
-        }
+        views.setImageViewResource(
+                R.id.widget_lines, station.railwayLinesResourceId());
 
         Intent intent = new Intent(context, DeparturesService.class);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         intent.putExtra("random", intent_counter);
         intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-        views.setRemoteAdapter(appWidgetId, R.id.widget_list, intent);
+        views.setRemoteAdapter(R.id.widget_list, intent);
         intent_counter++;
 
         manager.updateAppWidget(appWidgetId, views);
@@ -128,7 +121,7 @@ public class MetroTimeProvider extends AppWidgetProvider {
         final int N = appWidgetIds.length;
 
         for (int i = 0; i < N; i++) {
-            MetroTimeConfiguration.deleteStationId(context, appWidgetIds[i]);
+            ActiveWidgets.deleteWidget(context, appWidgetIds[i]);
         }
     }
 

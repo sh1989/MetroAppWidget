@@ -1,5 +1,6 @@
-
 package uk.co.samhogy.metroappwidget.model;
+
+import uk.co.samhogy.metroappwidget.R;
 
 public class Station implements Comparable<Station> {
     private final int id;
@@ -14,19 +15,27 @@ public class Station implements Comparable<Station> {
         this.url = url;
     }
 
-    public int getId() {
+    public int id() {
         return id;
     }
 
-    public String getName() {
+    public String name() {
         return name;
     }
 
-    public RailwayLines getLines() {
-        return lines;
+    public int railwayLinesResourceId() {
+        switch (lines) {
+        case GREEN:
+            return R.color.line_green;
+        case YELLOW:
+            return R.color.line_yellow;
+        case ALL:
+        default:
+            return R.drawable.shape_all_lines;
+        }
     }
 
-    public String getUrl() {
+    public String timetableUrl() {
         return url;
     }
 

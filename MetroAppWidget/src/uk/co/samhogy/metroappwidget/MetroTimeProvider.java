@@ -92,28 +92,25 @@ public class MetroTimeProvider extends AppWidgetProvider {
 
     static Bitmap buildUpdate(Context context, String text)
     {
-        int fontSizePX = convertDiptoPix(context, 28);
-        int pad = (fontSizePX / 9);
-        Paint paint = new Paint();
-        Typeface typeface = Typeface.createFromAsset(context.getAssets(), "fonts/Calvert.ttf");
+        final float density =
+                context.getResources().getDisplayMetrics().density;
+        final int fontSize = (int) (28 * density);
+        final int padding = (fontSize / 4);
+
+        final Paint paint = new Paint();
+        final Typeface typeface = Typeface.createFromAsset(context.getAssets(), "fonts/Calvert.ttf");
         paint.setAntiAlias(true);
         paint.setTypeface(typeface);
         paint.setColor(Color.BLACK);
-        paint.setTextSize(fontSizePX);
+        paint.setTextSize(fontSize);
 
-        int textWidth = (int) (paint.measureText(text) + pad * 2);
-        int height = (int) (fontSizePX / 0.75);
-        Bitmap bitmap = Bitmap.createBitmap(textWidth, height, Bitmap.Config.ARGB_4444);
-        Canvas canvas = new Canvas(bitmap);
-        float xOriginal = pad;
-        canvas.drawText(text, xOriginal, fontSizePX, paint);
+        final int textWidth = (int) (paint.measureText(text) + padding * 2);
+        final int height = (int) (fontSize / 0.75);
+        final Bitmap bitmap = Bitmap.createBitmap(textWidth, height, Bitmap.Config.ARGB_8888);
+        final Canvas canvas = new Canvas(bitmap);
+        canvas.drawText(text, padding, fontSize, paint);
+
         return bitmap;
-    }
-
-    static int convertDiptoPix(Context context, float dip) {
-        int value = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dip, context
-                .getResources().getDisplayMetrics());
-        return value;
     }
 
     @Override

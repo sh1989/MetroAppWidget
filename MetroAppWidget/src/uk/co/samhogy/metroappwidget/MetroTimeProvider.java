@@ -11,8 +11,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -22,15 +20,13 @@ import uk.co.samhogy.metroappwidget.model.Station;
 public class MetroTimeProvider extends AppWidgetProvider {
 
     private DataSource source;
-    private static int intent_counter = 0;
-    private static final String TAG = "uk.co.samhogy.metroappwidget";
 
     @Override
     public void onEnabled(Context context) {
-        Log.d(TAG, "onEnabled");
+        Log.debug("onEnabled");
         super.onEnabled(context);
         if (source == null) {
-            Log.d(TAG, "SOURCE CREATED in onEnabled");
+            Log.debug("SOURCE CREATED in onEnabled");
             source = new DataSource(context);
             source.open();
         }
@@ -38,29 +34,26 @@ public class MetroTimeProvider extends AppWidgetProvider {
 
     @Override
     public void onDisabled(Context context) {
-        Log.d(TAG, "onDisabled");
+        Log.debug("onDisabled");
         super.onDisabled(context);
-        Log.d(TAG, "SOURCE DELETED in onDisabled");
         if (source != null) {
+            Log.debug("SOURCE DELETED in onDisabled");
             source.close();
         }
     }
 
-    // Called every updatePeriodMillis
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager,
             int[] appWidgetIds) {
-        Log.d(TAG, "onUpdate");
-        final int N = appWidgetIds.length;
+        Log.debug("onUpdate");
 
         if (source == null) {
-            Log.d(TAG, "SOURCE CREATED in onUpdate");
+            Log.debug("SOURCE CREATED in onUpdate");
             source = new DataSource(context);
             source.open();
         }
 
-        for (int i = 0; i < N; i++) {
-            int appWidgetId = appWidgetIds[i];
+        for (int appWidgetId : appWidgetIds) {
             int stationId = ActiveWidgets.stationIdForWidget(context, appWidgetId);
             if (stationId != -1) {
                 updateAppWidget(context, appWidgetManager, appWidgetId,
@@ -81,10 +74,8 @@ public class MetroTimeProvider extends AppWidgetProvider {
 
         Intent intent = new Intent(context, DeparturesService.class);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        intent.putExtra("random", intent_counter);
         intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
         views.setRemoteAdapter(R.id.widget_list, intent);
-        intent_counter++;
 
         manager.updateAppWidget(appWidgetId, views);
         manager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_list);
@@ -115,10 +106,8 @@ public class MetroTimeProvider extends AppWidgetProvider {
 
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
-        final int N = appWidgetIds.length;
-
-        for (int i = 0; i < N; i++) {
-            ActiveWidgets.deleteWidget(context, appWidgetIds[i]);
+        for (int appWidgetId : appWidgetIds) {
+            ActiveWidgets.deleteWidget(context, appWidgetId);
         }
     }
 

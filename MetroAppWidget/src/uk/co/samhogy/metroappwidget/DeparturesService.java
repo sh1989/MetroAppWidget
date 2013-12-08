@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -31,7 +30,7 @@ public class DeparturesService extends RemoteViewsService {
         private final Context context;
         private final int appWidgetId;
         private List<Arrival> data = new ArrayList<Arrival>();
-        private static final String urlPrefix = "http://myjourney.nexus.org.uk/stopBoard/";
+        private static final String URL_PREFIX = "http://myjourney.nexus.org.uk/stopBoard/";
         private DataSource source;
 
         public ListRemoteViewsFactory(Context context, Intent i) {
@@ -63,12 +62,12 @@ public class DeparturesService extends RemoteViewsService {
                     final Station s = source.getStation(stationId);
 
                     final String response =
-                            StopBoardRequest.getTimesForStation(urlPrefix + s.timetableUrl());
+                            StopBoardRequest.getTimesForStation(URL_PREFIX + s.timetableUrl());
                     data = JSONParser.getArrivals(response);
                 }
             }
             else {
-                Log.d("MetroAppWidget", "No interweb connection detected, bailing out.");
+                Log.debug("No interweb connection detected, bailing out.");
                 data.clear();
             }
         }
@@ -102,9 +101,9 @@ public class DeparturesService extends RemoteViewsService {
             Arrival arrival = data.get(position);
 
             RemoteViews rv = layout(R.layout.list_row);
-            rv.setTextViewText(R.id.row_platform, Integer.toString(arrival.getPlatform()));
-            rv.setTextViewText(R.id.row_destination, arrival.getDestination());
-            rv.setTextViewText(R.id.row_time, arrival.getTime());
+            rv.setTextViewText(R.id.row_platform, arrival.platform());
+            rv.setTextViewText(R.id.row_destination, arrival.destination());
+            rv.setTextViewText(R.id.row_time, arrival.time());
             return rv;
         }
 

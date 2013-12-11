@@ -73,8 +73,10 @@ public class JSONParser {
 
         // Check to see whether we have ticked over to the next day.
         if (referenceDate != null && dateTime.before(referenceDate)) {
+            // Temporarily move the calendar to the next day
             calendar.add(Calendar.DATE, 1);
             dateTime = calendar.getTime();
+            calendar.add(Calendar.DATE, -1);
         }
 
         return dateTime;

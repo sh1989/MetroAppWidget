@@ -43,7 +43,7 @@ public class MetroTimeProvider extends AppWidgetProvider {
     }
 
     @Override
-    public void onUpdate(Context context, AppWidgetManager appWidgetManager,
+    public void onUpdate(Context context, AppWidgetManager manager,
             int[] appWidgetIds) {
         Log.debug("onUpdate");
 
@@ -56,7 +56,7 @@ public class MetroTimeProvider extends AppWidgetProvider {
         for (int appWidgetId : appWidgetIds) {
             int stationId = ActiveWidgets.stationIdForWidget(context, appWidgetId);
             if (stationId != -1) {
-                updateAppWidget(context, appWidgetManager, appWidgetId,
+                updateAppWidget(context, manager, appWidgetId,
                         source.getStation(stationId));
             }
         }
@@ -67,7 +67,7 @@ public class MetroTimeProvider extends AppWidgetProvider {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
         views.setEmptyView(R.id.widget_list, R.id.empty_view);
         views.setViewVisibility(R.id.empty_view, View.GONE);
-        views.setImageViewBitmap(R.id.widget_title, buildUpdate(context, station.name()));
+        views.setImageViewBitmap(R.id.widget_title, renderFont(context, station.name()));
 
         views.setImageViewResource(
                 R.id.widget_lines, station.railwayLinesResourceId());
@@ -81,7 +81,7 @@ public class MetroTimeProvider extends AppWidgetProvider {
         manager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_list);
     }
 
-    static Bitmap buildUpdate(Context context, String text)
+    private static Bitmap renderFont(Context context, String text)
     {
         final float density =
                 context.getResources().getDisplayMetrics().density;
